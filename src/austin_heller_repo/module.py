@@ -71,7 +71,7 @@ class Module():
 		if self.__device_instance_guid is not None:
 			raise Exception(f"Already marked as ready")
 		else:
-			self.__device_instance_guid = self.__on_ready_method()
+			self.__device_instance_guid = self.__on_ready_method(self.get_purpose_guid())
 			self.__block_send_until_ready_semaphore.release()
 
 	# TODO override
