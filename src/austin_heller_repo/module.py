@@ -33,13 +33,13 @@ class ModuleMessage():
 
 class Module(ABC):
 
-	def __init__(self, *, send_method, get_devices_by_purpose_method):
+	def __init__(self, *, send_message_method, get_devices_by_purpose_method):
 
-		self.__send_method = send_method
+		self.__send_message_method = send_message_method
 		self.__get_devices_by_purpose_method = get_devices_by_purpose_method
 
 	def send(self, *, module_message: ModuleMessage):
-		self.__send_method(module_message)
+		self.__send_message_method(module_message)
 
 	def _get_devices_by_purpose(self, *, purpose_guid: str):
 		return self.__get_devices_by_purpose_method(purpose_guid)
