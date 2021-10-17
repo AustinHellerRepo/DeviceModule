@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: device-module-austinhellerrepo
-Version: 0.0.6
+Version: 0.0.7
 Summary: A basic Esp32 package for running and implementing device modules
 Home-page: https://github.com/AustinHellerRepo/Socket
 Author: Austin Heller

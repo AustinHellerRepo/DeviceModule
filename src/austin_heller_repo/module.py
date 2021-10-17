@@ -62,6 +62,11 @@ class Module():
 	def _get_device_guid(self) -> str:
 		return self.__device_guid
 
+	def _get_device_instance_guid(self) -> str:
+		if self.__device_instance_guid is None:
+			raise Exception(f"Must first signal ready by calling _ready method.")
+		return self.__device_instance_guid
+
 	def _ready(self):
 		if self.__device_instance_guid is not None:
 			raise Exception(f"Already marked as ready")
