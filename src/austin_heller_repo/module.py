@@ -3,13 +3,17 @@ from abc import ABC, abstractmethod
 
 class ModuleMessage():
 
-	def __init__(self, *, transmission_json: dict, source_guid: str, source_instance_guid: str, destination_guid: str, destination_instance_guid: str):
+	def __init__(self, *, queue_guid: str, transmission_json: dict, source_guid: str, source_instance_guid: str, destination_guid: str, destination_instance_guid: str):
 
+		self.__queue_guid = queue_guid
 		self.__transmission_json = transmission_json
 		self.__source_guid = source_guid
 		self.__source_instance_guid = source_instance_guid
 		self.__destination_guid = destination_guid
 		self.__destination_instance_guid = destination_instance_guid
+
+	def get_queue_guid(self) -> str:
+		return self.__queue_guid
 
 	def get_transmission_json(self) -> dict:
 		return self.__transmission_json
