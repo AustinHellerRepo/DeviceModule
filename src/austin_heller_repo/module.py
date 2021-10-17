@@ -33,16 +33,24 @@ class ModuleMessage():
 
 class Module(ABC):
 
-	def __init__(self, *, send_message_method, get_devices_by_purpose_method):
+	def __init__(self, *, device_guid: str, device_instance_guid: str, send_message_method, get_devices_by_purpose_method):
 
+		self.__device_guid = device_guid
+		self.__device_instance_guid = device_instance_guid
 		self.__send_message_method = send_message_method
 		self.__get_devices_by_purpose_method = get_devices_by_purpose_method
 
-	def send(self, *, module_message: ModuleMessage):
+	def _send(self, *, module_message: ModuleMessage):
 		self.__send_message_method(module_message)
 
 	def _get_devices_by_purpose(self, *, purpose_guid: str):
 		return self.__get_devices_by_purpose_method(purpose_guid)
+
+	def _get_device_guid(self) -> str:
+		return self.__device_guid
+
+	def _get_device_instance_guid(self) -> str:
+		return self.__device_instance_guid
 
 	@abstractmethod
 	def receive(self, *, module_message: ModuleMessage):
