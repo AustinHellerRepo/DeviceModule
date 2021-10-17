@@ -3,14 +3,14 @@ from abc import ABC, abstractmethod
 
 class ModuleMessage():
 
-	def __init__(self, *, queue_guid: str, transmission_json: dict, source_guid: str, source_instance_guid: str, destination_guid: str, destination_instance_guid: str):
+	def __init__(self, *, queue_guid: str, transmission_json: dict, source_device_guid: str, source_device_instance_guid: str, destination_device_guid: str, destination_device_instance_guid: str):
 
 		self.__queue_guid = queue_guid
 		self.__transmission_json = transmission_json
-		self.__source_guid = source_guid
-		self.__source_instance_guid = source_instance_guid
-		self.__destination_guid = destination_guid
-		self.__destination_instance_guid = destination_instance_guid
+		self.__source_device_guid = source_device_guid
+		self.__source_device_instance_guid = source_device_instance_guid
+		self.__destination_device_guid = destination_device_guid
+		self.__destination_device_instance_guid = destination_device_instance_guid
 
 	def get_queue_guid(self) -> str:
 		return self.__queue_guid
@@ -18,17 +18,17 @@ class ModuleMessage():
 	def get_transmission_json(self) -> dict:
 		return self.__transmission_json
 
-	def get_source_guid(self) -> str:
-		return self.__source_guid
+	def get_source_device_guid(self) -> str:
+		return self.__source_device_guid
 
-	def get_source_instance_guid(self) -> str:
-		return self.__source_instance_guid
+	def get_source_device_instance_guid(self) -> str:
+		return self.__source_device_instance_guid
 
-	def get_destination_guid(self) -> str:
-		return self.__destination_guid
+	def get_destination_device_guid(self) -> str:
+		return self.__destination_device_guid
 
-	def get_destination_instance_guid(self) -> str:
-		return self.__destination_instance_guid
+	def get_destination_device_instance_guid(self) -> str:
+		return self.__destination_device_instance_guid
 
 
 class Module(ABC):
