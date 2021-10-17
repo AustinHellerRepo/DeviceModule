@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from austin_heller_repo.socket import Semaphore
 
 
 class ModuleMessage():
@@ -31,16 +31,29 @@ class ModuleMessage():
 		return self.__destination_device_instance_guid
 
 
-class Module(ABC):
+class Module():
 
-	def __init__(self, *, device_guid: str, device_instance_guid: str, send_message_method, get_devices_by_purpose_method):
+	def __init__(self, *, device_guid: str, send_message_method, get_devices_by_purpose_method, on_ready_method):
 
 		self.__device_guid = device_guid
-		self.__device_instance_guid = device_instance_guid
 		self.__send_message_method = send_message_method
 		self.__get_devices_by_purpose_method = get_devices_by_purpose_method
+		self.__on_ready_method = on_ready_method
+
+		self.__device_instance_guid = None  # type: str
+		self.__block_send_until_ready_semaphore = Semaphore()
+		self.__block_receive_until_ready_semaphore = Semaphore()
+
+		self.__initialize()
+
+	def __initialize(self):
+
+		self.__block_send_until_ready_semaphore.acquire()
+		self.__block_receive_until_ready_semaphore.acquire()
 
 	def _send(self, *, module_message: ModuleMessage):
+		self.__block_send_until_ready_semaphore.acquire()
+		self.__block_send_until_ready_semaphore.release()
 		self.__send_message_method(module_message)
 
 	def _get_devices_by_purpose(self, *, purpose_guid: str):
@@ -49,22 +62,33 @@ class Module(ABC):
 	def _get_device_guid(self) -> str:
 		return self.__device_guid
 
-	def _get_device_instance_guid(self) -> str:
-		return self.__device_instance_guid
+	def _ready(self):
+		if self.__device_instance_guid is not None:
+			raise Exception(f"Already marked as ready")
+		else:
+			self.__device_instance_guid = self.__on_ready_method()
+			self.__block_send_until_ready_semaphore.release()
 
-	@abstractmethod
-	def receive(self, *, module_message: ModuleMessage):
+	# TODO override
+	def _receive(self, *, module_message: ModuleMessage):
 		raise NotImplementedError()
 
-	@abstractmethod
+	def receive(self, *, module_message: ModuleMessage):
+		self.__block_receive_until_ready_semaphore.acquire()
+		self.__block_receive_until_ready_semaphore.release()
+		self._receive(
+			module_message=module_message
+		)
+
+	# TODO override
 	def start(self):
 		raise NotImplementedError()
 
-	@abstractmethod
+	# TODO override
 	def stop(self):
 		raise NotImplementedError()
 
-	@abstractmethod
+	# TODO override
 	def get_purpose_guid(self) -> str:
 		raise NotImplementedError()
 
